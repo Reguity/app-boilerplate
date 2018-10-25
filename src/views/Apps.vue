@@ -2,7 +2,12 @@
   <div class="apps">
     <div class="columns is-centered">
       <section class="content-box column is-three-quarters">
-        <div style="float: right"><a class="button is-primary">Create new app</a></div>
+        <div style="float: right">
+          <a class="button is-primary">
+            <font-awesome-icon class="icon" icon="plus" />
+            Create new app
+          </a>
+        </div>
         <h1>Apps</h1>
         <table id="app-table" class="table" style="margin-top: 15px; width: 100%">
           <tr>
@@ -14,94 +19,22 @@
             <th>Users</th>
             <th>Actions</th>
           </tr>
-          <tr>
-            <td>531253879897531</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Värdepapperszonen (VPZ)</td>
-            <td>Production</td>
-            <td><span class="tag is-light">owner</span></td>
-            <td>1836</td>
+          <tr v-for="({ id, imgUrl, name, status, scopes, users }) in apps" :key="id">
+            <td>{{ id }}</td>
+            <td><img :src="imgUrl || placeholderImage" /></td>
+            <td>{{ name }}</td>
+            <td>{{ status }}</td>
+            <td><span v-for="(scope) in scopes" class="tag is-light" :key="scope">{{ scope }}</span></td>
+            <td>{{ users }}</td>
             <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>315317895318975</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Shareledger (NVR)</td>
-            <td>Production</td>
-            <td><span class="tag is-light">administrator</span></td>
-            <td>10462</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>45342532789539</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Boardroom</td>
-            <td>Production</td>
-            <td><span class="tag is-light">administrator</span></td>
-            <td>10462</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>64364981895398</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Superadmin</td>
-            <td>Production</td>
-            <td><span class="tag is-light">superadmin</span></td>
-            <td>2</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>6426409094908</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Crowdfunding</td>
-            <td>Production</td>
-            <td>
-              <span class="tag is-light">administrator</span>
-              <span class="tag is-light">owner</span>
-            </td>
-            <td>145</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>53259837289856</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Annual meetings service</td>
-            <td>Production</td>
-            <td>
-              <span class="tag is-light">administrator</span>
-              <span class="tag is-light">owner</span>
-            </td>
-            <td>56</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
-            </td>
-          </tr>
-          <tr>
-            <td>6423642689407</td>
-            <td><img src="../assets/images/app-placeholder.png" /></td>
-            <td>Dividends manager</td>
-            <td>Production</td>
-            <td><span class="tag is-light">administrator</span></td>
-            <td>462</td>
-            <td>
-              <a class="button is-primary">Edit</a>
-              <a class="button is-danger" style="margin-left: 10px;">Delete</a>
+              <a class="button is-primary">
+                <font-awesome-icon class="icon" icon="edit" />
+                Edit
+              </a>
+              <a class="button is-danger" style="margin-left: 10px;">
+                <font-awesome-icon class="icon" icon="trash" />
+                Delete
+              </a>
             </td>
           </tr>
         </table>
@@ -118,3 +51,78 @@
   }
 }
 </style>
+
+<script>
+const placeholderImage = require('../assets/images/app-placeholder.png');
+export default {
+  name: 'apps',
+  components: {},
+  data: () => ({
+    placeholderImage,
+    // TODO: Fetch from GraphQL!
+    scopes: [
+      { owner: 'Query and mutate resources for a user by virtue of him/her being an owner of the resource' },
+      { administrator: 'Query and mutate resources for a user by virtue of him/her being an administrator or the resource' }
+    ],
+    // TODO: Fetch from GraphQL!
+    apps: [
+      {
+        id: 531253879897531,
+        imageUrl: null,
+        name: 'Värdepapperszonen (VPZ)',
+        status: 'Production',
+        scopes: ['owner'],
+        users: 1836
+      },
+      {
+        id: 315317895318975,
+        imageUrl: null,
+        name: 'Shareledger (NVR)',
+        status: 'Production',
+        scopes: ['administrator'],
+        users: 10462
+      },
+      {
+        id: 45342532789539,
+        imageUrl: null,
+        name: 'Boardroom',
+        status: 'Production',
+        scopes: ['administrator'],
+        users: 2334
+      },
+      {
+        id: 64364981895398,
+        imageUrl: null,
+        name: 'Superadmin',
+        status: 'Production',
+        scopes: ['superadmin'],
+        users: 2
+      },
+      {
+        id: 6426409094908,
+        imageUrl: null,
+        name: 'Crowdfunding',
+        status: 'Production',
+        scopes: ['administrator','owner'],
+        users: 145
+      },
+      {
+        id: 5321537158935,
+        imageUrl: null,
+        name: 'Annual meetings service',
+        status: 'Production',
+        scopes: ['administrator','owner'],
+        users: 56
+      },
+      {
+        id: 6423642689407,
+        imageUrl: null,
+        name: 'Dividends manager',
+        status: 'Production',
+        scopes: ['administrator'],
+        users: 462
+      }
+    ]
+  })
+}
+</script>

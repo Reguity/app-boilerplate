@@ -6,6 +6,7 @@
           <div class="navbar-brand">
             <a class="navbar-item" href="../">
               <img src="./assets/images/reguity-logo-white.png" alt="Logo">
+              <span class="sublogo">for developers</span>
             </a>
             <span class="navbar-burger burger" data-target="navbarMenu">
               <span></span>
@@ -21,7 +22,7 @@
                   <router-link class="navbar-item" to="/api">API</router-link>
                   <router-link class="navbar-item" to="/apps">My apps</router-link>
                   <div class="navbar-item" style="margin-left:50px;">
-                    <img alt="RAMPKORV" style="margin-right: 15px;"src="https://www.gravatar.com/avatar/93061b45e1e0769d8df8639a16c1697d?s=40">
+                    <img alt="RAMPKORV" style="margin-right: 15px;" src="https://www.gravatar.com/avatar/93061b45e1e0769d8df8639a16c1697d?s=40">
                     Logout
                   </div>
               </div>
@@ -59,6 +60,11 @@ export default {
   font-weight: 400;
 }
 #view {
-  height: calc(100vh - 88px);
+  height: calc(100vh - 96px);
+}
+.sublogo {
+  font-family: Poppins;
+  margin-left: 10px;
+  margin-top: -3px;
 }
 </style>
