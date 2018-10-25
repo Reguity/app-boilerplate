@@ -1,5 +1,7 @@
-@import '~bulma/bulma';
-@import url('https://unpkg.com/bulmaswatch/flatly/bulmaswatch.min.css');
+@import "~bulmaswatch/flatly/_variables.scss";
+@import "~bulma/bulma.sass";
+@import "~bulmaswatch/flatly/_overrides.scss";
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat%3A400%7CPoppins%3A700%2C600&ver=1527756273');
 
 body {

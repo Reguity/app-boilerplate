@@ -10,7 +10,7 @@
         <h2>GraphQL Playground</h2>
         <p>Explore our API using GraphQL Playground, the API console.</p>
         <p>
-          <a href="#" target="_blank">Launch GraphQL Playground</a>
+          <a href="https://api.reguity.com:9000" target="_blank">Launch GraphQL Playground</a>
         </p>
       </section>
     </div>
