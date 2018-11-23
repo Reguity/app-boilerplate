@@ -1,0 +1,11 @@
+#import "./fragments/userParts.gql"
+
+mutation LoginContinued ($code: String!) {
+  loginContinued: authenticateWithAuthorizationCode(authorizationCode: $code) {
+    accessToken
+    expiresIn
+    user {
+      ...userParts
+    }
+  }
+}

@@ -1,0 +1,32 @@
+query Apps {
+  authorizations {
+    nodes {
+      id
+      authenticationFields {
+        type
+        value
+        isVerified
+      }
+      asAdministrator {
+        ... on AdministratorQueryResolution {
+          apps {
+            nodes {
+              id
+              name
+              websiteUrl
+              termsUrl
+              privacyPolicyUrl
+              contactEmail
+              imageUrl
+              secret
+            }
+          }
+        }
+        ... on StatusResponse {
+          code
+          message
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query CurrentUser {
+  user: currentUser {
+    id
+    firstname
+    lastname
+  }
+  app: currentApp {
+    id
+  }
+}

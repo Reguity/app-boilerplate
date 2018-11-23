@@ -1,0 +1,9 @@
+fragment userParts on User {
+  ... on UserOwned {
+    id
+    firstname
+    lastname
+    countryCode
+    languageCode
+  }
+}

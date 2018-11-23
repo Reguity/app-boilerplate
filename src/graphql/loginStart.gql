@@ -1,0 +1,17 @@
+mutation LoginStart (
+  $clientId: ID!
+  $scopeCodes: [ScopeCode!]!
+  $acceptUrl: URL!
+  $declineUrl: URL!
+  $state: String!
+) {
+  redirect: requestAuthorizationCode(params: {
+    clientId: $clientId
+    scopeCodes: $scopeCodes
+    acceptUrl: $acceptUrl
+    declineUrl: $declineUrl
+    state: $state
+  }) {
+    url
+  }
+}

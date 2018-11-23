@@ -17,14 +17,23 @@
           <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-end">
               <div class="navbar-end">
-                  <router-link class="navbar-item" to="/docs">Docs</router-link>
-                  <router-link class="navbar-item" to="/tools">Tools</router-link>
-                  <router-link class="navbar-item" to="/api">API</router-link>
-                  <router-link class="navbar-item" to="/apps">My apps</router-link>
-                  <div class="navbar-item" style="margin-left:50px;">
-                    <img alt="RAMPKORV" style="margin-right: 15px;" src="https://www.gravatar.com/avatar/93061b45e1e0769d8df8639a16c1697d?s=40">
-                    Logout
-                  </div>
+                <router-link class="navbar-item" to="/docs">Docs</router-link>
+                <router-link class="navbar-item" to="/tools">Tools</router-link>
+                <router-link class="navbar-item" to="/api">API</router-link>
+                <router-link class="navbar-item" to="/apps">My apps</router-link>
+                <ApolloQuery style="padding-top: 10px;" :query="currentLoginQuery" @result="onUserResult">
+                  <template slot-scope="{ query, result: { data, loading } }">
+                    <template v-if="!loading && data">
+                      <template v-if="!data.user">
+                        <a class="navbar-item" @click.stop="loginStart()">Login</a>
+                      </template>
+                      <template v-else>
+                        {{ data.user.firstname }} {{ data.user.lastname }}
+                        <a class="navbar-item" @click.stop="logout()">Logout</a>
+                      </template>
+                    </template>
+                  </template>
+                </ApolloQuery>
               </div>
             </div>
           </div>
@@ -40,9 +49,67 @@
 
 <script>
 import ReguityFooter from '@/components/ReguityFooter.vue'
+import { onLogin, onLogout } from './vue-apollo.js';
 
 export default {
   name: 'app',
+  data: () => ({
+    loginStartMutation: require('./graphql/loginStart.gql'),
+    loginContinuedMutation: require('./graphql/loginContinued.gql'),
+    loggedInUser: null,
+    currentLoginQuery: require('./graphql/currentLogin.gql')
+  }),
+  mounted: function() {
+    // TODO: Get parameters through router + remove them from URL
+    let self = this;
+    let urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('code');
+    let state = urlParams.get('state');
+    if (code && state) {
+      let csrf = localStorage.getItem('csrf');
+      if (state === csrf) {
+        console.warn('State matched');
+        this.$apollo.mutate({
+          mutation: this.loginContinuedMutation,
+          variables: { code }
+        }).then((res) => {
+          let { data: { loginContinued: { accessToken, expiresIn, user } } } = res;
+          self.loggedInUser = user;
+          const apolloClient = this.$apollo.provider.defaultClient;
+          onLogin(apolloClient, accessToken);
+          //self.currentLoginQuery.refetch();
+        });
+      } else {
+        console.warn('State did not match');
+      }
+    }
+  },
+  methods: {
+    loginStart: function() {
+      let csrf = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8);
+      localStorage.setItem('csrf', csrf);
+      this.$apollo.mutate({
+        mutation: this.loginStartMutation,
+        variables: {
+          clientId: '46368ff9-c208-48f4-8098-02c20132e83a', // app center
+          scopeCodes: ['apps'], // TODO: more scopes or more specific scopes?
+          acceptUrl: location.href,
+          declineUrl: location.href,
+          state: csrf
+        }
+      }).then((res) => {
+        let { data: { redirect: { url } } } = res;
+        location.href = url;
+      });
+    },
+    logout: function () {
+      const apolloClient = this.$apollo.provider.defaultClient;
+      onLogout(apolloClient);
+    },
+    onUserResult: function(res){
+      console.warn('RES!', res);
+    }
+  },
   components: {
     ReguityFooter
   }
