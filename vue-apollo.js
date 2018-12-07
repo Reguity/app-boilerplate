@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import introspectionQueryResultData from '../fragmentTypes.json';
+import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData
