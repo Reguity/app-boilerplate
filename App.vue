@@ -6,7 +6,7 @@
           <div class="navbar-brand">
             <a class="navbar-item" href="../">
               <img src="./assets/images/reguity-logo-white.png" alt="Logo">
-              <span class="sublogo">for developers</span>
+              <span class="sublogo">{{ appName }}</span>
             </a>
             <span class="navbar-burger burger" data-target="navbarMenu">
               <span></span>
@@ -17,10 +17,6 @@
           <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-end">
               <div class="navbar-end">
-                <router-link class="navbar-item" to="/docs">Docs</router-link>
-                <router-link class="navbar-item" to="/tools">Tools</router-link>
-                <router-link class="navbar-item" to="/api">API</router-link>
-                <router-link class="navbar-item" to="/apps">My apps</router-link>
                 <ApolloQuery style="padding-top: 10px;" :query="currentLoginQuery" @result="onUserResult">
                   <template slot-scope="{ query, result: { data, loading } }">
                     <template v-if="!loading && data">
@@ -48,19 +44,20 @@
 </template>
 
 <script>
+// TODO: Generate menu from router
 import ReguityFooter from '@/components/ReguityFooter.vue'
 import { onLogin, onLogout } from './vue-apollo.js';
 
 export default {
   name: 'app',
   data: () => ({
+    appName: "My App", // TODO: Get from config
     loginStartMutation: require('./graphql/loginStart.gql'),
     loginContinuedMutation: require('./graphql/loginContinued.gql'),
     loggedInUser: null,
     currentLoginQuery: require('./graphql/currentLogin.gql')
   }),
   mounted: function() {
-    // TODO: Get parameters through router + remove them from URL
     let self = this;
     let urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code');
@@ -68,7 +65,6 @@ export default {
     if (code && state) {
       let csrf = localStorage.getItem('csrf');
       if (state === csrf) {
-        console.warn('State matched');
         this.$apollo.mutate({
           mutation: this.loginContinuedMutation,
           variables: { code }
@@ -91,8 +87,8 @@ export default {
       this.$apollo.mutate({
         mutation: this.loginStartMutation,
         variables: {
-          clientId: '46368ff9-c208-48f4-8098-02c20132e83a', // app center
-          scopeCodes: ['apps'], // TODO: more scopes or more specific scopes?
+          clientId: '', // TODO: Get from config
+          scopeCodes: [], // TODO: Get from config
           acceptUrl: location.href,
           declineUrl: location.href,
           state: csrf
@@ -107,7 +103,7 @@ export default {
       onLogout(apolloClient);
     },
     onUserResult: function(res){
-      console.warn('RES!', res);
+      // TODO?
     }
   },
   components: {
